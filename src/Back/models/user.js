@@ -5,7 +5,7 @@ const pool = new Pool();
 const User = {
   create: (user, callback) => {
     const query =
-      "INSERT INTO users (username, password, email, isAdmin, createdAt) VALUES ($1, $2, $3, false, NOW()) RETURNING id";
+      "INSERT INTO users (username, password, email, isAdmin, createdAt) VALUES ($1, $2, $3, false, NOW()) RETURNING id, username, isadmin";
     const hash = bcrypt.hashSync(user.password, 8);
     const params = [user.username, hash, user.email];
     pool.query(query, params, function (err, user) {

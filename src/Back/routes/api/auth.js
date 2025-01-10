@@ -92,7 +92,10 @@ router.post("/register", (req, res) => {
     }
     if (user && user.id) {
       return res.json({
-        message: "Création de compte réussie."
+        user: {
+          username: user.username,
+          isAdmin : user.isadmin
+        }
       });
     }
     return res.json({
