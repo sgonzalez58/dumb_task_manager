@@ -48,6 +48,7 @@ const adminRoutes = require("./Back/routes/admin");
 
 const apiAuthRoutes = require("./Back/routes/api/auth");
 const apiTasksRoutes = require("./Back/routes/api/tasks");
+const apiAdminRoutes = require("./Back/routes/api/admin");
 
 app.get("/", (req, res) => {
   if (req.session.userId) {
@@ -71,6 +72,7 @@ app.use("/tasks", taskRoutes);
 app.use("/admin", adminRoutes);
 app.use("/api/user", apiAuthRoutes)
 app.use("/api/tasks", apiTasksRoutes)
+app.use("/api/admin", apiAdminRoutes)
 
 // Server setup
 const PORT = process.env.PORT || 3000;

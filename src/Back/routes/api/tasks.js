@@ -7,8 +7,6 @@ const { User } = require("../../models/user");
 const auth = require('../../middleware/apiAuth')
 const jwt = require('jsonwebtoken')
 
-
-
 router.get("/", auth, (req, res) => {
 
   Task.getAllByUser(req.auth.userId, (err, data) => {
