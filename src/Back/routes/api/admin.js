@@ -18,7 +18,7 @@ router.get("/", adminAuth, (req, res) => {
 
 router.post("/toggle-admin/:userId", adminAuth, (req, res) => {
   const targetUserId = req.params.userId;
-  const isAdmin = req.body.isAdmin;
+  const role_user = req.body.role_user;
 
   if (targetUserId === adminAuth.userId) {
     return res.json({
@@ -26,7 +26,7 @@ router.post("/toggle-admin/:userId", adminAuth, (req, res) => {
     });
   }
 
-  User.toggleAdmin(targetUserId, isAdmin, (err) => {
+  User.toggleAdmin(targetUserId, role_user, (err) => {
     if (err) {
       return res.json({
         err: "Erreur lors de la modification du statut admin"
@@ -34,7 +34,8 @@ router.post("/toggle-admin/:userId", adminAuth, (req, res) => {
     }
     res.json({
       user: {
-        id: targetUserId
+        id: targetUserId,
+        role: role_user
       }
     });
   });

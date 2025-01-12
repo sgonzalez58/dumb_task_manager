@@ -16,7 +16,7 @@ router.post("/login", (req, res) => {
         
       return res.json({
         user: {
-          isAdmin : user.isadmin,
+          role : user.role,
           username : user.username
         },
         token: jwt.sign({
@@ -101,8 +101,14 @@ router.post("/register", (req, res) => {
       return res.json({
         user: {
           username: user.username,
-          isAdmin : user.isadmin
-        }
+          role : user.role
+        },
+        token: jwt.sign({
+            userId: user.id
+          },
+          process.env.JWT_SECRET,
+          { expiresIn: '24h'}
+          )
       });
     }
     return res.json({

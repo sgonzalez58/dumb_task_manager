@@ -6,7 +6,7 @@ const authMiddleware = (req, res, next) => {
 };
 
 const adminMiddleware = (req, res, next) => {
-  if (!req.session || !req.session.userId || !req.session.isAdmin) {
+  if (!req.session || !req.session.userId || req.session.role == 'user') {
     return res.redirect("/");
   }
   next();

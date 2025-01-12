@@ -13,7 +13,7 @@ router.post("/login", (req, res) => {
     }
     if (user && user.connected) {
       req.session.userId = user.id;
-      req.session.isAdmin = user.isAdmin;
+      req.session.role = user.role;
       return res.redirect("/");
     }
     res.render("pages/login", {

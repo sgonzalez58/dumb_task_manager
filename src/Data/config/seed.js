@@ -5,13 +5,13 @@ const dotenv = require("dotenv").config();
 
 async function main(){
     const query =
-      "INSERT INTO users (username, password, email, isAdmin, createdAt) \
-        VALUES ($1, $2, $3, true, NOW()) \
+      "INSERT INTO users (username, password, email, role, createdAt) \
+        VALUES ($1, $2, $3, 'superAdmin', NOW()) \
         ON CONFLICT(username)\
         DO UPDATE SET\
             password = $2,\
             email = $3,\
-            isAdmin = true\
+            role = 'superAdmin'\
         RETURNING id";
     const hash = bcrypt.hashSync("fezq265e1rgAZZFS45$&d5az", 8);
     const params = ["admin", hash, "admin@dumb-task.com"];

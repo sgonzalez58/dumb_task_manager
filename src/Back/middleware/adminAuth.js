@@ -5,16 +5,16 @@ const adminAuth = (req, res, next) => {
 
   const { User } = require("../models/user");
   User.findById(req.session.userId, (err, user) => {
-    if (err || !user || !user.isadmin) {
+    if (err || !user || user.role == 'user') {
       return res.status(403).render("pages/error", {
         message: "Accès non autorisé",
         error: { status: 403 },
         userId: req.session.userId,
         username: req.session.username,
-        isAdmin: false,
+        role: req.session.role,
       });
     }
-    req.session.isAdmin = user.isadmin;
+    req.session.role = user.role;
     next();
   });
 };

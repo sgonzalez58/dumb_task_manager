@@ -28,7 +28,7 @@ router.get("/", authenticate, (req, res) => {
         data: data || [],
         userId: req.session.userId,
         username: user.username,
-        isAdmin: user.isadmin,
+        role: user.role,
       });
     });
   });

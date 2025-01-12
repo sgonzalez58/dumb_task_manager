@@ -5,7 +5,7 @@ const pool = new Pool();
 const User = {
   create: (user, callback) => {
     const query =
-      "INSERT INTO users (username, password, email, isAdmin, createdAt) VALUES ($1, $2, $3, false, NOW()) RETURNING id, username, isadmin";
+      "INSERT INTO users (username, password, email, role, createdAt) VALUES ($1, $2, $3, 'user', NOW()) RETURNING id, username, role";
     const hash = bcrypt.hashSync(user.password, 8);
     const params = [user.username, hash, user.email];
     pool.query(query, params, function (err, user) {
@@ -14,7 +14,7 @@ const User = {
   },
 
   getAll: (callback) => {
-    const query = "SELECT id, username, isadmin FROM users ORDER BY id";
+    const query = "SELECT id, username, role FROM users ORDER BY id";
     pool.query(query, [], (err, result) => {
       if (err) {
         return callback(err, null);
@@ -49,7 +49,7 @@ const User = {
 
   // Récupération d'un utilisateur par ID
   findById: (id, callback) => {
-    const query = "SELECT id, username, isadmin FROM users WHERE id = $1";
+    const query = "SELECT id, username, role FROM users WHERE id = $1";
     pool.query(query, [id], (err, result) => {
       if (err) {
         return callback(err, null);
@@ -58,9 +58,10 @@ const User = {
     });
   },
 
-  toggleAdmin: (userId, isAdmin, callback) => {
-    const query = "UPDATE users SET isadmin = $1 WHERE id = $2";
-    pool.query(query, [isAdmin, userId], (err, result) => {
+  toggleAdmin: (userId, role, callback) => {
+    const query = "UPDATE users SET role = $1 WHERE id = $2";
+    console.log(query)
+    pool.query(query, [role, userId], (err, result) => {
       if (err) {
         return callback(err);
       }

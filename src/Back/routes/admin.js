@@ -23,7 +23,7 @@ router.get("/", (req, res) => {
         users,
         userId: req.session.userId,
         username: currentUser.username,
-        isAdmin: req.session.isAdmin,
+        role: req.session.role,
       });
     });
   });
@@ -31,7 +31,7 @@ router.get("/", (req, res) => {
 
 router.post("/toggle-admin/:userId", adminAuth, (req, res) => {
   const targetUserId = req.params.userId;
-  const isAdmin = req.body.isAdmin === "on";
+  const role = req.body.role;
 
   if (targetUserId === req.session.userId.toString()) {
     return res
@@ -39,7 +39,7 @@ router.post("/toggle-admin/:userId", adminAuth, (req, res) => {
       .send("Vous ne pouvez pas modifier vos propres droits d'administrateur");
   }
 
-  User.toggleAdmin(targetUserId, isAdmin, (err) => {
+  User.toggleAdmin(targetUserId, role, (err) => {
     if (err) {
       return res
         .status(500)

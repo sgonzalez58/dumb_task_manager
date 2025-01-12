@@ -3,13 +3,18 @@ const pool = new Pool();
 const dotenv = require("dotenv").config();
 
 const createTableQuery = `
+DO $$ BEGIN
+    CREATE TYPE userTypes AS ENUM ('user', 'admin', 'superAdmin');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 CREATE TABLE IF NOT EXISTS users (
   id        SERIAL PRIMARY KEY,
   username  varchar(40) NOT NULL UNIQUE,
   password  varchar(255) NOT NULL,
   email     varchar(64) NOT NULL UNIQUE,
   createdAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  isAdmin   boolean NOT NULL DEFAULT false
+  role      userTypes NOT NULL DEFAULT 'user'
 )`;
 
 const createSessionTableQuery = `
