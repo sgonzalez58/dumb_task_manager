@@ -34,11 +34,15 @@ router.get("/", auth, (req, res) => {
 router.get("/remove/:taskId", auth, (req, res) => {
   const taskId = req.params.taskId;
 
-  Task.delete(taskId, req.session.userId, (err) => {
+  Task.delete(taskId, req.auth.userId, (err) => {
     if (err) {
-      return res.status(500).send(err.message);
+      return res.json({
+        err: err.message
+      });
     }
-    res.redirect("/tasks");
+    res.json({
+        task: {id: taskId}
+    });
   });
 });
 
@@ -47,16 +51,20 @@ router.post("/", auth, (req, res) => {
 
   Task.create(
     {
-      user_id: req.session.userId,
+      user_id: req.auth.userId,
       title,
       description,
       completed: completion,
     },
     (err, task) => {
       if (err) {
-        return res.status(500).send(err.message);
+        return res.json({
+            err: err.message
+        });
       }
-      res.redirect("/tasks");
+      return res.json({
+        task: task
+      })
     }
   );
 });
@@ -64,12 +72,18 @@ router.post("/", auth, (req, res) => {
 router.post("/toggle/:taskId", auth, (req, res) => {
   const taskId = req.params.taskId;
 
-  Task.toggle(taskId, req.session.userId, (err, task) => {
+  Task.toggle(taskId, req.auth.userId, (err, task) => {
     if (err) {
       console.error("Erreur toggle:", err);
-      return res.status(500).send(err.message);
+      return res.json({
+        err: err.message
+      });
     }
-    res.redirect("/tasks");
+    res.json({
+      task: {
+        id: taskId
+      }
+    });
   });
 });
 
