@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const { User } = require("../../models/user");
+const dotenv = require("dotenv").config();
+const jwt = require('jsonwebtoken')
 
 // Placeholder routes for authentication
 router.post("/login", (req, res) => {
@@ -11,13 +13,18 @@ router.post("/login", (req, res) => {
       });
     }
     if (user && user.connected) {
-      req.session.userId = user.id;
-      req.session.isAdmin = user.isAdmin;
+        
       return res.json({
         user: {
           isAdmin : user.isadmin,
           username : user.username
         },
+        token: jwt.sign({
+            userId: user.id
+          },
+          process.env.JWT_SECRET,
+          { expiresIn: '24h'}
+          )
       });
     }
     return res.json({
